@@ -353,45 +353,7 @@ img {
     z-index: 1;
 }
 
-.blob-container {
-    position: relative;
-    width: 400px;
-    height: 400px;
-}
-
-.blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.6;
-    animation: floating 8s infinite ease-in-out alternate;
-}
-
-.shape-1 {
-    width: 300px; height: 300px;
-    background: var(--accent-primary);
-    top: 0; left: 0;
-}
-
-.shape-2 {
-    width: 250px; height: 250px;
-    background: var(--accent-secondary);
-    bottom: 0; right: 0;
-    animation-delay: -4s;
-}
-
-.shape-3 {
-    width: 200px; height: 200px;
-    background: var(--accent-tertiary);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: -2s;
-}
-
-@keyframes floating {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(20px, -30px) scale(1.1); }
-}
+/* Hero layout remains, gradient blobs removed */
 
 /* =========================================
    About Section
@@ -455,22 +417,18 @@ img {
     aspect-ratio: 1;
     margin: 0 auto;
     border-radius: 20px;
-    background: var(--gradient-1);
+    background: var(--accent-primary);
     padding: 3px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
-.placeholder-avatar {
+.profile-img {
     width: 100%;
     height: 100%;
-    background: var(--bg-dark);
     border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 8rem;
-    color: var(--text-secondary);
-    opacity: 0.5;
+    object-fit: cover;
+    object-position: center top;
+    background: var(--bg-dark);
 }
 
 /* =========================================
@@ -583,18 +541,26 @@ img {
     box-shadow: var(--glass-shadow);
 }
 
-.project-img-placeholder {
+.project-img-link {
+    display: block;
     width: 100%;
     height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    color: rgba(255,255,255,0.8);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-darker);
 }
 
-.project-img-placeholder.gradient-1 { background: var(--gradient-1); }
-.project-img-placeholder.gradient-2 { background: var(--gradient-2); }
+.project-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.project-img-link:hover .project-card-image {
+    transform: scale(1.05);
+}
 
 .project-info {
     padding: 2rem;
