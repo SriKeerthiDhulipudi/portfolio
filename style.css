@@ -413,7 +413,7 @@ img {
 .image-wrapper {
     position: relative;
     width: 100%;
-    max-width: 450px;
+    max-width: 320px;
     aspect-ratio: 1;
     margin: 0 auto;
     border-radius: 20px;
