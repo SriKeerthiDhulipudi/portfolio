@@ -132,4 +132,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 7. Dark Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const icon = themeToggle.querySelector('i');
+        
+        // Check for saved user preference on load
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark-theme') {
+            document.body.classList.add('dark-theme');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            if (document.body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark-theme');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                localStorage.setItem('theme', 'light-theme');
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+    }
+
 });
