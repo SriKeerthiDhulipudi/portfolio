@@ -1,392 +1,886 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sri Keerthi | Web Developer Portfolio</title>
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Portfolio of Sri Keerthi. A passionate software engineer focusing on high-performance web applications, modern UI/UX, and robust architecture.">
-    <meta name="theme-color" content="#4F46E5">
-    <meta property="og:title" content="Sri Keerthi | Web Developer Portfolio">
-    <meta property="og:description" content="Portfolio of Sri Keerthi. A passionate software engineer focusing on high-performance web applications, modern UI/UX, and robust architecture.">
-    <meta property="og:type" content="website">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
-        rel="stylesheet">
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sri Keerthi | Web Developer Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0e1318;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5ff;
+    --accent2: #7b61ff;
+    --accent3: #ff6b6b;
+    --text: #e8ecf0;
+    --muted: #6b7a8d;
+    --card: #111820;
+    --nav-bg: rgba(8,12,16,0.85);
+    --shadow: rgba(0,0,0,0.3);
+  }
+
+  body.light {
+    --bg: #f5f7fa;
+    --surface: #eef1f6;
+    --border: rgba(0,0,0,0.09);
+    --accent: #0077cc;
+    --accent2: #5b4fcf;
+    --accent3: #e05252;
+    --text: #111827;
+    --muted: #5a6475;
+    --card: #ffffff;
+    --nav-bg: rgba(245,247,250,0.9);
+    --shadow: rgba(0,0,0,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.4rem;
+    color: var(--accent); text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── THEME TOGGLE ── */
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    width: 52px; height: 28px;
+    cursor: pointer; position: relative;
+    transition: background 0.3s, border-color 0.3s;
+    flex-shrink: 0;
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: transform 0.3s, background 0.3s;
+  }
+  body.light .theme-toggle::after {
+    transform: translateX(24px);
+  }
+  .theme-icon {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    font-size: 0.7rem; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .theme-icon.moon { left: 6px; opacity: 1; }
+  .theme-icon.sun  { right: 5px; opacity: 0.5; }
+  body.light .theme-icon.moon { opacity: 0.5; }
+  body.light .theme-icon.sun  { opacity: 1; }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 5vw; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-label::before {
+    content: ''; display: block;
+    width: 2rem; height: 1px; background: var(--accent);
+  }
+
+  h2.section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 3.5rem;
+  }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 8rem;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4rem;
+  }
+
+  .hero-photo-wrap {
+    position: relative; flex-shrink: 0;
+    opacity: 0; animation: fadeUp 0.9s ease forwards 0.5s;
+  }
+  .hero-photo {
+    width: 300px; height: 340px;
+    object-fit: cover; object-position: top center;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    display: block;
+    box-shadow: 0 24px 64px var(--shadow);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  body.light .hero-photo {
+    box-shadow: 0 24px 64px rgba(0,119,204,0.12);
+  }
+  .hero-photo-wrap::before {
+    content: '';
+    position: absolute; inset: -10px;
+    border-radius: 22px;
+    border: 1px solid var(--accent);
+    opacity: 0.2;
+    pointer-events: none;
+  }
+  .hero-photo-badge {
+    position: absolute; bottom: -14px; right: -14px;
+    background: var(--accent); color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 700;
+    padding: 0.45rem 0.9rem; border-radius: 6px;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    filter: blur(130px); pointer-events: none;
+    top: -200px; right: -200px;
+    background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  body.light .hero-glow {
+    background: radial-gradient(circle, rgba(0,119,204,0.07) 0%, transparent 70%);
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    filter: blur(100px); pointer-events: none;
+    bottom: -100px; left: -100px;
+    background: radial-gradient(circle, rgba(123,97,255,0.1) 0%, transparent 70%);
+    animation: pulse 10s ease-in-out 2s infinite;
+  }
+  body.light .hero-glow2 {
+    background: radial-gradient(circle, rgba(91,79,207,0.07) 0%, transparent 70%);
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem; letter-spacing: 0.12em;
+    color: var(--accent); margin-bottom: 1.2rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  h1.hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800; line-height: 1.0;
+    letter-spacing: -0.04em;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  h1.hero-name span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-role {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 700; color: var(--muted);
+    margin-top: 0.5rem; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.55s;
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    font-size: 1.05rem; color: var(--muted); line-height: 1.8;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 1rem; margin-top: 2.5rem;
+    flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.85s;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    font-family: 'Syne', sans-serif; font-size: 0.9rem;
+    border: none; border-radius: 4px; cursor: pointer;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,229,255,0.3);
+  }
+
+  .btn-outline {
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text); font-weight: 600;
+    font-family: 'Syne', sans-serif; font-size: 0.9rem;
+    border: 1px solid var(--border); border-radius: 4px; cursor: pointer;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 1s;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif; font-size: 2.5rem;
+    font-weight: 800; color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--surface); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: start;
+  }
+  .about-text p {
+    color: var(--muted); font-size: 1.05rem; margin-bottom: 1.2rem;
+  }
+  .about-links {
+    display: flex; gap: 1rem; margin-top: 2rem;
+  }
+  .about-links a {
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--border); border-radius: 4px;
+    color: var(--muted); text-decoration: none; font-size: 0.88rem;
+    font-weight: 500; display: flex; align-items: center; gap: 0.5rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .about-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  .internship-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .internship-card:hover { border-color: rgba(0,229,255,0.3); }
+  .internship-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--accent);
+    border-radius: 3px 0 0 3px;
+  }
+  .internship-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .internship-company {
+    color: var(--accent); font-size: 0.88rem; font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  .internship-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--muted);
+  }
+  .internship-desc { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.8rem;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .skill-card:hover { transform: translateY(-4px); border-color: rgba(0,229,255,0.25); }
+  .skill-icon {
+    font-size: 1.8rem; margin-bottom: 1rem;
+  }
+  .skill-card h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+  .skill-card p { color: var(--muted); font-size: 0.88rem; }
+  .skill-tags {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem;
+  }
+  .tag {
+    padding: 0.25rem 0.7rem;
+    background: rgba(0,229,255,0.07); border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 3px; font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace; color: var(--accent);
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--surface); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover { transform: translateY(-5px); border-color: rgba(0,229,255,0.25); }
+
+  .project-img {
+    width: 100%; height: 180px; object-fit: cover;
+    display: block; background: #1a2030;
+  }
+  .project-img-placeholder {
+    width: 100%; height: 180px;
+    background: linear-gradient(135deg, #0e1825 0%, #1a2535 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: var(--muted);
+  }
+
+  .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .project-techs {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem;
+  }
+  .project-tech {
+    padding: 0.2rem 0.65rem; border-radius: 3px;
+    font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
+    background: rgba(123,97,255,0.1); border: 1px solid rgba(123,97,255,0.2);
+    color: #a89fff;
+  }
+  .project-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+  }
+  .problem-solution { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .problem-solution strong { color: var(--text); }
+  .project-impact {
+    font-size: 0.82rem; color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 0.75rem; padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+  .project-links {
+    display: flex; gap: 0.75rem; margin-top: 1.2rem;
+  }
+  .project-links a {
+    padding: 0.45rem 1rem; border-radius: 4px;
+    font-size: 0.8rem; font-weight: 600; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .link-live {
+    background: var(--accent); color: #000;
+  }
+  .link-live:hover { box-shadow: 0 4px 16px rgba(0,229,255,0.3); }
+  .link-code {
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .link-code:hover { border-color: var(--muted); color: var(--text); }
+
+  /* ── CERTIFICATIONS ── */
+  .certs-list {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .cert-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem 1.5rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+    transition: border-color 0.3s;
+  }
+  .cert-item:hover { border-color: rgba(0,229,255,0.3); }
+  .cert-icon {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .cert-name { font-weight: 600; font-size: 0.9rem; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--surface); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  }
+  .contact-info h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.4rem; margin-bottom: 0.75rem;
+  }
+  .contact-info p { color: var(--muted); margin-bottom: 2rem; }
+  .contact-detail {
+    display: flex; align-items: center; gap: 0.8rem;
+    margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .contact-detail span:first-child { font-size: 1.1rem; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label {
+    font-size: 0.8rem; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em;
+  }
+  .form-group input,
+  .form-group textarea {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.8rem 1rem;
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { min-height: 130px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 0.85rem;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  .internship-card, .skill-card, .project-card, .cert-item,
+  .form-group input, .form-group textarea {
+    transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s, color 0.3s;
+  }
+
+  /* light mode card shadow */
+  body.light .skill-card,
+  body.light .project-card,
+  body.light .cert-item,
+  body.light .internship-card {
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-photo-wrap { display: flex; justify-content: center; order: -1; }
+    .hero-photo { width: 220px; height: 250px; }
+  }
+
+  @media (max-width: 768px) {
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+    nav { padding: 1rem 4vw; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.78rem; }
+  }
+</style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <nav id="navbar" class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo">DK<span class="dot">.</span></a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact" class="btn-primary-sm">Get in Touch</a></li>
-                <li class="theme-toggle" id="theme-toggle" title="Toggle Dark/Light Mode"
-                    style="cursor: pointer; font-size: 1.3rem; color: var(--text-primary); display: flex; align-items: center; transition: color 0.3s;">
-                    <i class="fas fa-moon"></i>
-                </li>
-            </ul>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <p class="greeting hidden">Hello, I'm</p>
-            <h1 class="name hidden">Dhulipudi Sri Keerthi</h1>
-            <h2 class="role hidden">A <span id="typing-text"></span></h2>
-            <p class="hero-description hidden">
-                I build high-performance web applications with clean code and modern aesthetics. Passionate about solving complex problems through elegant UI/UX and robust architecture.
-            </p>
-            <div class="hero-cta hidden">
-                <a href="#projects" class="btn-primary">🚀 View My Projects</a>
-                <a href="#contact" class="btn-secondary">💬 Let’s Work Together</a>
-            </div>
-            <div class="hero-socials hidden">
-                <a href="https://github.com/SriKeerthiDhulipudi" target="_blank"><i class="fab fa-github"
-                        style="font-size: 1.5rem; color: var(--text-secondary); margin-right: 15px; transition: color 0.3s; margin-top: 15px; display: inline-block;"></i></a>
-                <a href="https://in.linkedin.com/in/sri-keerthi-dhulipudi-6ba4a9347" target="_blank"><i
-                        class="fab fa-linkedin-in"
-                        style="font-size: 1.5rem; color: var(--text-secondary); transition: color 0.3s; margin-top: 15px; display: inline-block;"></i></a>
-            </div>
-        </div>
-        <div class="hero-graphics hidden">
-            <div class="tech-stack-floating">
-                <div class="floating-icon icon-java"><i class="fab fa-java"></i></div>
-                <div class="floating-icon icon-python"><i class="fab fa-python"></i></div>
-                <div class="floating-icon icon-js"><i class="fab fa-js"></i></div>
-                <div class="floating-icon icon-react"><i class="fab fa-react"></i></div>
-            </div>
-        </div>
-    </section>
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">DK.</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-icon moon">🌙</span>
+      <span class="theme-icon sun">☀️</span>
+    </button>
+  </div>
+</nav>
 
-    <!-- About Section -->
-    <section id="about" class="about section-padding">
-        <div class="section-title hidden">
-            <h2>About Me</h2>
-            <div class="underline"></div>
-        </div>
-        <div class="about-content">
-            <div class="about-text hidden">
-                <h3>Passionate Developer & AI Enthusiast</h3>
-                <p>
-                    I am a Computer Science Engineering student at CMR Institute of Technology, Hyderabad, with a
-                    passion for building scalable applications and exploring the potential of Artificial Intelligence.
-                </p>
-                <p>
-                    My expertise spans across Backend Development with Java and Python, and Frontend engineering with
-                    modern web technologies. I thrive on solving complex problems and contributing to open-source
-                    communities.
-                </p>
-                <div class="social-links-about">
-                    <a href="https://github.com/SriKeerthiDhulipudi" target="_blank"><i class="fab fa-github"></i>
-                        GitHub</a>
-                    <a href="https://in.linkedin.com/in/sri-keerthi-dhulipudi-6ba4a9347" target="_blank"><i
-                            class="fab fa-linkedin-in"></i> LinkedIn</a>
-                </div>
+<!-- HERO -->
+<section id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
 
-                <div class="about-stats hidden">
-                    <div class="stat-box">
-                        <span class="stat-num">3+</span>
-                        <span class="stat-desc">Projects</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-num">7+</span>
-                        <span class="stat-desc">Certifications</span>
-                    </div>
-                </div>
-            </div>
-            <div class="about-image hidden">
-                <div class="image-wrapper">
-                    <img src="assets/profile.jpg" alt="Dhulipudi Sri Keerthi" class="profile-img">
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-eyebrow">// Hello, I'm</p>
+      <h1 class="hero-name"><span>Dhulipudi</span><br/>Sri Keerthi</h1>
+      <p class="hero-role">Full-Stack Developer &amp; AI Enthusiast</p>
+      <p class="hero-desc">I build high-performance web applications with clean code and modern aesthetics. Passionate about solving complex problems through elegant UI/UX and robust architecture.</p>
 
-    <!-- Internships Section -->
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">🚀 View My Projects</a>
+        <a href="#contact" class="btn-outline">💬 Let's Work Together</a>
+      </div>
 
-    <!-- Internships Section -->
-    <section id="internships" class="internships section-padding">
-        <div class="section-title hidden">
-            <h2>Internships</h2>
-            <div class="underline"></div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Projects</div>
         </div>
-        <div class="intern-container grid-2">
-            <div class="intern-card hidden">
-                <div class="intern-header">
-                    <i class="fas fa-building"></i>
-                    <div>
-                        <h3>Software Developer Intern</h3>
-                        <p>Infosys</p>
-                    </div>
-                </div>
-                <div class="intern-content">
-                    <span class="tag-date">Feb 2026 — Present</span>
-                    <p>Actively contributing to enterprise-level software development and learning industrial best
-                        practices.</p>
-                </div>
-            </div>
-            <div class="intern-card hidden">
-                <div class="intern-header">
-                    <i class="fas fa-trophy"></i>
-                    <div>
-                        <h3>Full Stack Dev</h3>
-                        <p>EvolveX</p>
-                    </div>
-                </div>
-                <div class="intern-content">
-                    <span class="tag-date">Recently Selected</span>
-                    <p>Earned an internship opportunity by showcasing innovative problem-solving at a prestigious
-                        hackathon.</p>
-                </div>
-            </div>
+        <div>
+          <div class="stat-num">7+</div>
+          <div class="stat-label">Certifications</div>
         </div>
-    </section>
+        <div>
+          <div class="stat-num">2</div>
+          <div class="stat-label">Internships</div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills section-padding">
-        <div class="section-title hidden">
-            <h2>My Expertise</h2>
-            <div class="underline"></div>
-        </div>
-        <div class="skills-container grid-3">
-            <div class="skill-card hidden">
-                <div class="skill-icon"><i class="fas fa-code"></i></div>
-                <h3>Programming</h3>
-                <p>Efficiently developing logic using <span>Java</span> and <span>Python</span> for various
-                    computational tasks.</p>
-            </div>
-            <div class="skill-card hidden">
-                <div class="skill-icon"><i class="fas fa-globe"></i></div>
-                <h3>Web Development</h3>
-                <p>Building modern apps with <span>HTML</span>, <span>CSS</span>, <span>JavaScript</span>,
-                    <span>React</span>, and <span>Tailwind CSS</span>.
-                </p>
-            </div>
-            <div class="skill-card hidden">
-                <div class="skill-icon"><i class="fas fa-tools"></i></div>
-                <h3>Tools & Knowledge</h3>
-                <p>Proficient in <span>VS Code</span>, <span>ServiceNow</span>, MS Office, and version control with
-                    <span>Git</span>.
-                </p>
-            </div>
-        </div>
+    <div class="hero-photo-wrap">
+      <img
+        src="https://dhulipudi-portfolio.vercel.app/assets/profile.jpg"
+        alt="Dhulipudi Sri Keerthi"
+        class="hero-photo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <div style="display:none; width:300px; height:340px; border-radius:16px; border:2px solid var(--border); background:var(--card); align-items:center; justify-content:center; font-size:4rem;">👩‍💻</div>
+      <div class="hero-photo-badge">Available for hire ✓</div>
+    </div>
+  </div>
+</section>
 
-        <div class="tech-stack hidden">
-            <h3>Soft Skills</h3>
-            <div class="tech-tags">
-                <span class="tag">Problem-solving</span>
-                <span class="tag">Leadership</span>
-                <span class="tag">Teamwork</span>
-                <span class="tag">Adaptability</span>
-                <span class="tag">Collaboration</span>
-            </div>
-        </div>
-    </section>
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">About Me</p>
+  <h2 class="section-title reveal">Passionate Developer<br/>&amp; AI Enthusiast</h2>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects section-padding">
-        <div class="section-title hidden">
-            <h2>Featured Projects</h2>
-            <div class="underline"></div>
-        </div>
-        <div class="projects-grid grid-2">
-            <!-- Project 1 -->
-            <div class="project-card hidden">
-                <a href="https://airline-reservation.vercel.app" target="_blank" class="project-img-link">
-                    <img src="assets/airline.png" class="project-card-image" alt="Airline Reservation System">
-                </a>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span>Java</span>
-                        <span>MySQL</span>
-                        <span>JDBC</span>
-                    </div>
-                    <h3>Airline Reservation System</h3>
-                    <div class="project-desc">
-                        <p><strong>Problem:</strong> Manual seat management is prone to overbooking errors.</p>
-                        <p><strong>Solution:</strong> A robust booking app with passenger/admin modules and real-time database syncing.</p>
-                    </div>
-                    <div class="project-result">
-                        <i class="fas fa-bolt"></i> Ensured 100% data integrity during concurrent booking transactions.
-                    </div>
-                    <div class="project-links">
-                        <a href="https://airline-reservation.vercel.app" target="_blank" class="project-link btn-primary-sm">Live Demo <i class="fas fa-external-link-alt"></i></a>
-                        <a href="https://github.com/SriKeerthiDhulipudi/AirlineReservationSystem" target="_blank" class="project-link github-link"><i class="fab fa-github"></i> Source Code</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Project 2 -->
-            <div class="project-card hidden">
-                <a href="https://epieats.vercel.app" target="_blank" class="project-img-link">
-                    <img src="assets/epieats.png" class="project-card-image" alt="EpiEats - Allergy-Friendly Recipes">
-                </a>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span>JS</span>
-                        <span>Tailwind</span>
-                        <span>localStorage</span>
-                    </div>
-                    <h3>EpiEats - Allergy-Friendly Recipes</h3>
-                    <div class="project-desc">
-                        <p><strong>Problem:</strong> Users with strict dietary restrictions struggle to find safe recipes easily.</p>
-                        <p><strong>Solution:</strong> A responsive web app filtering recipes based on user allergies with built-in ingredient substitutions.</p>
-                    </div>
-                    <div class="project-result">
-                        <i class="fas fa-bolt"></i> Improved recipe matching accuracy and user convenience.
-                    </div>
-                    <div class="project-links">
-                        <a href="https://epieats.vercel.app" target="_blank" class="project-link btn-primary-sm">Live Demo <i class="fas fa-external-link-alt"></i></a>
-                        <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="project-link github-link"><i class="fab fa-github"></i> Source Code</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Project 3 -->
-            <div class="project-card hidden">
-                <a href="https://price-intelligence-ui.vercel.app" target="_blank" class="project-img-link">
-                    <img src="assets/price.png" class="project-card-image" alt="Price Intelligence System">
-                </a>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span>Python</span>
-                        <span>Web Scraping</span>
-                        <span>Data Analytics</span>
-                    </div>
-                    <h3>Price Intelligence System</h3>
-                    <div class="project-desc">
-                        <p><strong>Problem:</strong> Tracking product prices across multiple platforms manually is time-consuming.</p>
-                        <p><strong>Solution:</strong> A Python-based tracking system using intelligent scraping to analyze and compare prices.</p>
-                    </div>
-                    <div class="project-result">
-                        <i class="fas fa-bolt"></i> Automated tracking across 5+ platforms with real-time accuracy.
-                    </div>
-                    <div class="project-links">
-                        <a href="https://price-intelligence-ui.vercel.app" target="_blank" class="project-link btn-primary-sm">Live Demo <i class="fas fa-external-link-alt"></i></a>
-                        <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="project-link github-link"><i class="fab fa-github"></i> Source Code</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Project 4 -->
-            <div class="project-card hidden">
-                <a href="https://ai-public-problem-reporter.vercel.app/" target="_blank" class="project-img-link">
-                    <img src="assets/civicai.png" class="project-card-image" alt="CivicAI - Problem Reporter">
-                </a>
-                <div class="project-info">
-                    <div class="project-tags">
-                        <span>AI Integration</span>
-                        <span>React</span>
-                        <span>Node.js</span>
-                    </div>
-                    <h3>CivicAI - Problem Reporter</h3>
-                    <div class="project-desc">
-                        <p><strong>Problem:</strong> Citizens lack an efficient, streamlined way to report public issues to authorities.</p>
-                        <p><strong>Solution:</strong> An AI-driven solution for reporting and managing public issues automatically.</p>
-                    </div>
-                    <div class="project-result">
-                        <i class="fas fa-bolt"></i> Bridged the gap between community and technology seamlessly.
-                    </div>
-                    <div class="project-links">
-                        <a href="https://ai-public-problem-reporter.vercel.app/" target="_blank" class="project-link btn-primary-sm">Live Demo <i class="fas fa-external-link-alt"></i></a>
-                        <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="project-link github-link"><i class="fab fa-github"></i> Source Code</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I am a Computer Science Engineering student at <strong>CMR Institute of Technology, Hyderabad</strong>, with a passion for building scalable applications and exploring the potential of Artificial Intelligence.</p>
+      <p>My expertise spans Backend Development with <strong>Java and Python</strong>, and Frontend engineering with modern web technologies. I thrive on solving complex problems and contributing to open-source communities.</p>
+      <div class="about-links">
+        <a href="https://github.com/SriKeerthiDhulipudi" target="_blank">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://in.linkedin.com/in/sri-keerthi-dhulipudi-6ba4a9347" target="_blank">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
 
-    <!-- Certifications Section -->
-    <section id="certifications" class="certifications section-padding">
-        <div class="section-title hidden">
-            <h2>Certifications</h2>
-            <div class="underline"></div>
-        </div>
-        <div class="certs-container hidden">
-            <ul class="certs-list">
-                <li><i class="fas fa-certificate"></i> <strong>LeetCode 50 Days Badge (2025)</strong> — Solved coding
-                    challenges for 50+ days.</li>
-                <li><i class="fas fa-certificate"></i> <strong>Salesforce Certified Agentforce Specialist</strong></li>
-                <li><i class="fas fa-certificate"></i> <strong>Java Foundation Certification</strong></li>
-                <li><i class="fas fa-certificate"></i> <strong>48-Hour Hackathon at CMR Institute of Technology</strong>
-                    (offered by EY and Microsoft)
-                </li>
-                <li><i class="fas fa-certificate"></i> <strong>Agentblazer Champion</strong> — Trailhead (Salesforce,
-                    2025)</li>
+    <div class="reveal">
+      <div class="internship-card">
+        <div class="internship-title">Software Developer Intern</div>
+        <div class="internship-company">Infosys</div>
+        <div class="internship-date">Feb 2026 — Present</div>
+        <div class="internship-desc">Actively contributing to enterprise-level software development and learning industrial best practices.</div>
+      </div>
+      <div class="internship-card">
+        <div class="internship-title">Full Stack Dev</div>
+        <div class="internship-company">EvolveX</div>
+        <div class="internship-date">Recently Selected</div>
+        <div class="internship-desc">Earned an internship opportunity by showcasing innovative problem-solving at a prestigious hackathon.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            </ul>
-        </div>
-    </section>
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">Expertise</p>
+  <h2 class="section-title reveal">My Skill Set</h2>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact section-padding">
-        <div class="contact-container hidden">
-            <div class="contact-info">
-                <h2>Let's build something beautiful together.</h2>
-                <p>I'm currently available for internships or full-time roles. If you have a project that needs some
-                    creative magic, I'd love to hear about it.</p>
-                <div class="contact-methods">
-                    <div class="method">
-                        <i class="fas fa-envelope"></i>
-                        <span>dhulipudisrikeerthi@gmail.com</span>
-                    </div>
-                    <div class="method">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Hyderabad, India</span>
-                    </div>
-                </div>
-                <div class="social-links">
-                    <a href="https://github.com/SriKeerthiDhulipudi" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://in.linkedin.com/in/sri-keerthi-dhulipudi-6ba4a9347" target="_blank"><i
-                            class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-            <div class="contact-form">
-                <form id="form">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="Tell me about your project..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary w-full">Send Message <i
-                            class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
-        </div>
-    </section>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚙️</div>
+      <h3>Programming</h3>
+      <p>Efficiently developing logic using Java and Python for various computational tasks.</p>
+      <div class="skill-tags">
+        <span class="tag">Java</span>
+        <span class="tag">Python</span>
+        <span class="tag">OOP</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <h3>Web Development</h3>
+      <p>Building modern apps with HTML, CSS, JavaScript, React, and Tailwind CSS.</p>
+      <div class="skill-tags">
+        <span class="tag">React</span>
+        <span class="tag">Tailwind</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">HTML/CSS</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🛠️</div>
+      <h3>Tools &amp; Knowledge</h3>
+      <p>Proficient in VS Code, ServiceNow, MS Office, and version control with Git.</p>
+      <div class="skill-tags">
+        <span class="tag">Git</span>
+        <span class="tag">VS Code</span>
+        <span class="tag">ServiceNow</span>
+        <span class="tag">MySQL</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🤝</div>
+      <h3>Soft Skills</h3>
+      <p>A collaborative team player with strong leadership and adaptability in dynamic environments.</p>
+      <div class="skill-tags">
+        <span class="tag">Leadership</span>
+        <span class="tag">Teamwork</span>
+        <span class="tag">Adaptability</span>
+        <span class="tag">Problem-Solving</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <a href="#home" class="logo">DK<span class="dot">.</span></a>
-            <p>&copy; 2026 Dhulipudi Sri Keerthi. All rights reserved.</p>
-        </div>
-    </footer>
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label reveal">Work</p>
+  <h2 class="section-title reveal">Featured Projects</h2>
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-img-placeholder">✈️</div>
+      <div class="project-body">
+        <div class="project-techs">
+          <span class="project-tech">Java</span>
+          <span class="project-tech">MySQL</span>
+          <span class="project-tech">JDBC</span>
+        </div>
+        <div class="project-title">Airline Reservation System</div>
+        <p class="problem-solution"><strong>Problem:</strong> Manual seat management is prone to overbooking errors.</p>
+        <p class="problem-solution"><strong>Solution:</strong> A robust booking app with passenger/admin modules and real-time database syncing.</p>
+        <div class="project-impact">→ 100% data integrity during concurrent booking transactions.</div>
+        <div class="project-links">
+          <a href="https://airline-reservation.vercel.app" target="_blank" class="link-live">Live Demo</a>
+          <a href="https://github.com/SriKeerthiDhulipudi/AirlineReservationSystem" target="_blank" class="link-code">Source Code</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img-placeholder">🍽️</div>
+      <div class="project-body">
+        <div class="project-techs">
+          <span class="project-tech">JavaScript</span>
+          <span class="project-tech">Tailwind</span>
+          <span class="project-tech">localStorage</span>
+        </div>
+        <div class="project-title">EpiEats — Allergy-Friendly Recipes</div>
+        <p class="problem-solution"><strong>Problem:</strong> Users with strict dietary restrictions struggle to find safe recipes easily.</p>
+        <p class="problem-solution"><strong>Solution:</strong> A responsive web app filtering recipes based on user allergies with built-in ingredient substitutions.</p>
+        <div class="project-impact">→ Improved recipe matching accuracy and user convenience.</div>
+        <div class="project-links">
+          <a href="https://epieats.vercel.app" target="_blank" class="link-live">Live Demo</a>
+          <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="link-code">Source Code</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img-placeholder">📊</div>
+      <div class="project-body">
+        <div class="project-techs">
+          <span class="project-tech">Python</span>
+          <span class="project-tech">Web Scraping</span>
+          <span class="project-tech">Data Analytics</span>
+        </div>
+        <div class="project-title">Price Intelligence System</div>
+        <p class="problem-solution"><strong>Problem:</strong> Tracking product prices across multiple platforms manually is time-consuming.</p>
+        <p class="problem-solution"><strong>Solution:</strong> A Python-based tracking system using intelligent scraping to analyze and compare prices.</p>
+        <div class="project-impact">→ Automated tracking across 5+ platforms with real-time accuracy.</div>
+        <div class="project-links">
+          <a href="https://price-intelligence-ui.vercel.app" target="_blank" class="link-live">Live Demo</a>
+          <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="link-code">Source Code</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img-placeholder">🤖</div>
+      <div class="project-body">
+        <div class="project-techs">
+          <span class="project-tech">AI Integration</span>
+          <span class="project-tech">React</span>
+          <span class="project-tech">Node.js</span>
+        </div>
+        <div class="project-title">CivicAI — Problem Reporter</div>
+        <p class="problem-solution"><strong>Problem:</strong> Citizens lack an efficient, streamlined way to report public issues to authorities.</p>
+        <p class="problem-solution"><strong>Solution:</strong> An AI-driven solution for reporting and managing public issues automatically.</p>
+        <div class="project-impact">→ Bridged the gap between community and technology seamlessly.</div>
+        <div class="project-links">
+          <a href="https://ai-public-problem-reporter.vercel.app/" target="_blank" class="link-live">Live Demo</a>
+          <a href="https://github.com/SriKeerthiDhulipudi" target="_blank" class="link-code">Source Code</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <p class="section-label reveal">Achievements</p>
+  <h2 class="section-title reveal">Certifications</h2>
+  <div class="certs-list">
+    <div class="cert-item reveal">
+      <div class="cert-icon">🏆</div>
+      <div>
+        <div class="cert-name">LeetCode 50 Days Badge (2025)</div>
+        <div style="color:var(--muted);font-size:0.82rem;margin-top:0.25rem;">Solved coding challenges for 50+ consecutive days.</div>
+      </div>
+    </div>
+    <div class="cert-item reveal">
+      <div class="cert-icon">☁️</div>
+      <div>
+        <div class="cert-name">Salesforce Certified Agentforce Specialist</div>
+        <div style="color:var(--muted);font-size:0.82rem;margin-top:0.25rem;">Certified in Salesforce's AI-powered Agentforce platform.</div>
+      </div>
+    </div>
+    <div class="cert-item reveal">
+      <div class="cert-icon">☕</div>
+      <div>
+        <div class="cert-name">Java Foundation Certification</div>
+        <div style="color:var(--muted);font-size:0.82rem;margin-top:0.25rem;">Certified proficiency in core Java programming.</div>
+      </div>
+    </div>
+    <div class="cert-item reveal">
+      <div class="cert-icon">⚡</div>
+      <div>
+        <div class="cert-name">48-Hour Hackathon — CMR Institute</div>
+        <div style="color:var(--muted);font-size:0.82rem;margin-top:0.25rem;">Offered by EY and Microsoft. Won internship at EvolveX.</div>
+      </div>
+    </div>
+    <div class="cert-item reveal">
+      <div class="cert-icon">🥇</div>
+      <div>
+        <div class="cert-name">Agentblazer Champion — Trailhead</div>
+        <div style="color:var(--muted);font-size:0.82rem;margin-top:0.25rem;">Salesforce Trailhead, 2025.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label reveal">Get in Touch</p>
+  <h2 class="section-title reveal">Let's build something<br/>beautiful together.</h2>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Open to Opportunities</h3>
+      <p>I'm currently available for internships or full-time roles. If you have a project that needs some creative magic, I'd love to hear about it.</p>
+      <div class="contact-detail">
+        <span>✉️</span>
+        <span>dhulipudisrikeerthi@gmail.com</span>
+      </div>
+      <div class="contact-detail">
+        <span>📍</span>
+        <span>Hyderabad, India</span>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <div class="form-group">
+        <label>NAME</label>
+        <input type="text" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label>EMAIL</label>
+        <input type="email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>MESSAGE</label>
+        <textarea placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="btn-primary" style="align-self:flex-start;margin-top:0.5rem;">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--accent);margin-bottom:0.5rem;">DK.</div>
+  © 2026 Dhulipudi Sri Keerthi. All rights reserved.
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Theme toggle
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.body.classList.add('light');
+
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  });
+</script>
 </body>
-
 </html>
