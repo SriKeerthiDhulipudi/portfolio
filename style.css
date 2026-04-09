@@ -2,38 +2,35 @@
    Design System & Variables
    ========================================= */
 :root {
-    /* Colors */
-    --bg-dark: #F8FAFC;
-    --bg-darker: #F1F5F9;
-    --bg-card: rgba(255, 255, 255, 0.7);
-
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-
+    /* Colors - Light Mode (Tailwind inspired) */
+    --bg-dark: #FFFFFF;          /* bg-white */
+    --bg-darker: #F9FAFB;        /* bg-gray-50 */
+    --bg-card: #FFFFFF;
+    
+    --text-primary: #111827;     /* text-gray-900 */
+    --text-secondary: #4B5563;   /* text-gray-600 */
+    
     /* Gradients */
-    --accent-primary: #4F46E5;
-    /* Slightly deeper Indigo for light mode */
-    --accent-secondary: #DB2777;
-    /* Slightly deeper Pink */
-    --accent-tertiary: #7C3AED;
-    /* Slightly deeper Purple */
+    --accent-primary: #4F46E5;   /* indigo-600 */
+    --accent-secondary: #DB2777; /* pink-600 */
+    --accent-tertiary: #7C3AED;  /* purple-600 */
     --gradient-1: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
     --gradient-2: linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary));
     --gradient-text: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-
-    /* Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
-
+    
+    /* Glassmorphism & Borders */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: #E5E7EB;     /* border-gray-200 */
+    --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    
     /* Typography */
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
-
+    
     /* Layout */
     --max-width: 1200px;
     --nav-height: 80px;
-
+    
     /* Transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -42,13 +39,14 @@
    Theme Variables (Dark Mode)
    ========================================= */
 body.dark-theme {
-    --bg-dark: #0F172A;
-    --bg-darker: #020617;
-    --bg-card: rgba(15, 23, 42, 0.7);
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --glass-bg: rgba(15, 23, 42, 0.5);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --bg-dark: #111827;          /* bg-gray-900 */
+    --bg-darker: #0F172A;        /* bg-slate-900 */
+    --bg-card: #1F2937;          /* bg-gray-800 */
+    --text-primary: #F9FAFB;     /* text-gray-50 */
+    --text-secondary: #D1D5DB;   /* text-gray-300 */
+    --glass-bg: rgba(31, 41, 55, 0.8);
+    --glass-border: #374151;     /* border-gray-700 */
+    --glass-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================================
@@ -567,12 +565,12 @@ img {
 }
 
 .skill-card {
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 2.5rem 2rem;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--glass-shadow);
 }
 
 .skill-card:hover {
@@ -608,11 +606,11 @@ img {
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--glass-shadow);
 }
 
 .tech-stack h3 {
@@ -658,12 +656,12 @@ img {
 }
 
 .hire-card {
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 2.5rem;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--glass-shadow);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -717,12 +715,12 @@ img {
 }
 
 .project-card {
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     overflow: hidden;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--glass-shadow);
 }
 
 .project-card:hover {
@@ -847,7 +845,7 @@ img {
 .contact-container {
     max-width: var(--max-width);
     margin: 0 auto;
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 30px;
     padding: 4rem;
@@ -941,7 +939,7 @@ input,
 textarea {
     width: 100%;
     padding: 1rem 1.2rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-dark);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     color: var(--text-primary);
