@@ -112,13 +112,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (certContainer) {
         certContainer.innerHTML = '';
         certs.forEach(item => {
+          const isPdf = item.image_url.toLowerCase().endsWith('.pdf');
           const div = document.createElement('div');
           div.className = 'project-card reveal';
           div.innerHTML = `
-            <img src="${item.image_url}" alt="${item.title}" class="project-img" onerror="this.onerror=null;this.src='';this.classList.add('project-img-placeholder');"/>
+            ${isPdf ? 
+              `<div class="project-img-placeholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; background: var(--card); border-bottom: 1px solid var(--border); height: 200px;">
+                <span style="font-size: 3rem; margin-bottom: 0.5rem;">📄</span>
+                <span style="font-size: 0.8rem; color: var(--muted);">PDF Document</span>
+              </div>` : 
+              `<img src="${item.image_url}" alt="${item.title}" class="project-img" onerror="this.onerror=null;this.src='';this.classList.add('project-img-placeholder');"/>`
+            }
             <div class="project-body">
               <div class="project-title">${item.title}</div>
-              <p style="color: var(--muted); font-size: 0.85rem;">Issued by ${item.issued_by}</p>
+              <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">Issued by ${item.issued_by}</p>
+              ${isPdf ? `<a href="${item.image_url}" target="_blank" class="link-live" style="font-size: 0.8rem;">View Certificate (PDF)</a>` : ''}
             </div>
           `;
           certContainer.appendChild(div);
