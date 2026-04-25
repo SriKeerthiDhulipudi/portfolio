@@ -114,8 +114,35 @@ async function editCertificate(id) {
 document.getElementById('cert-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const title = document.getElementById('cert-title').value;
-  const image_url = document.getElementById('cert-image').value;
+  let image_url = document.getElementById('cert-image').value;
   const issued_by = document.getElementById('cert-issued').value;
+  const fileInput = document.getElementById('cert-file');
+  const file = fileInput.files[0];
+
+  // If a file is selected, upload it first
+  if (file) {
+    const fileName = `${Date.now()}_${file.name}`;
+    const { data, error } = await supabaseClient.storage
+      .from('certificates')
+      .upload(fileName, file);
+    
+    if (error) {
+      alert("Error uploading file: " + error.message);
+      return;
+    }
+
+    // Get the public URL
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('certificates')
+      .getPublicUrl(fileName);
+    
+    image_url = publicUrlData.publicUrl;
+  }
+
+  if (!image_url) {
+    alert("Please provide an image URL or upload a file.");
+    return;
+  }
 
   let result;
   if (editingId && editingTable === 'certificates') {
@@ -127,8 +154,11 @@ document.getElementById('cert-form').addEventListener('submit', async (e) => {
   if (!result.error) {
     resetForm('cert');
     fetchCertificates();
+  } else {
+    alert("Error: " + result.error.message);
   }
 });
+
 
 async function deleteCertificate(id) {
   if (confirm("Delete this certificate?")) {
