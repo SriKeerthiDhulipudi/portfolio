@@ -103,6 +103,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelectorAll('#gallery .reveal').forEach(el => observer.observe(el));
     } else if (!galleryError) {
       galleryContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No gallery images yet.</div>';
+    }
+
     // Fetch Certificates
     const { data: certs, error: certError } = await supabaseClient.from('certificates').select('*').order('created_at', { ascending: false });
     const certContainer = document.getElementById('certificates-container');
@@ -126,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else if (!certError && certContainer) {
       certContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No certificates added yet.</div>';
     }
+
 
   } catch (err) {
     console.error("Error fetching dynamic content:", err);
