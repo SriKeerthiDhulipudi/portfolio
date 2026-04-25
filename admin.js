@@ -70,44 +70,73 @@ async function fetchData() {
   fetchExperience();
   fetchProjects();
   fetchGallery();
-  fetchMessages();
+  fetchCertificates();
 }
 
-/* --- MESSAGES --- */
-async function fetchMessages() {
-  const { data, error } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
-  const list = document.getElementById('messages-list');
+/* --- CERTIFICATES --- */
+async function fetchCertificates() {
+  const { data, error } = await supabaseClient.from('certificates').select('*').order('created_at', { ascending: false });
+  const list = document.getElementById('cert-list');
   list.innerHTML = '';
-  if (data && data.length > 0) {
-    data.forEach(msg => {
+  if (data) {
+    data.forEach(cert => {
       const div = document.createElement('div');
       div.className = 'data-item';
-      div.style.flexDirection = 'column';
-      div.style.alignItems = 'flex-start';
       div.innerHTML = `
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h4 style="margin: 0;">${msg.name}</h4>
-          <span style="font-size: 0.75rem; color: var(--muted);">${new Date(msg.created_at).toLocaleString()}</span>
+        <div>
+          <h4>${cert.title}</h4>
+          <p>${cert.issued_by} | ${cert.image_url}</p>
         </div>
-        <p style="color: var(--accent); margin-bottom: 0.5rem;">${msg.email}</p>
-        <p style="color: var(--text); font-style: italic; background: rgba(255,255,255,0.03); padding: 0.8rem; border-radius: 4px; width: 100%; border-left: 3px solid var(--accent);">
-          "${msg.message}"
-        </p>
-        <button class="action-btn delete-btn" style="margin-top: 1rem; align-self: flex-end;" onclick="deleteMessage(${msg.id})">Delete Message</button>
+        <div>
+          <button class="action-btn" style="background: var(--accent); color: #000;" onclick="editCertificate(${cert.id})">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteCertificate(${cert.id})">Delete</button>
+        </div>
       `;
       list.appendChild(div);
     });
-  } else {
-    list.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">Your inbox is empty.</div>';
   }
 }
 
-async function deleteMessage(id) {
-  if (confirm("Delete this message?")) {
-    await supabaseClient.from('messages').delete().eq('id', id);
-    fetchMessages();
+async function editCertificate(id) {
+  const { data } = await supabaseClient.from('certificates').select('*').eq('id', id).single();
+  if (data) {
+    editingId = id;
+    editingTable = 'certificates';
+    document.getElementById('cert-title').value = data.title;
+    document.getElementById('cert-image').value = data.image_url;
+    document.getElementById('cert-issued').value = data.issued_by;
+    document.querySelector('#certificates h3').textContent = "Editing Certificate";
+    document.querySelector('#cert-form button').textContent = "Save Changes";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+document.getElementById('cert-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const title = document.getElementById('cert-title').value;
+  const image_url = document.getElementById('cert-image').value;
+  const issued_by = document.getElementById('cert-issued').value;
+
+  let result;
+  if (editingId && editingTable === 'certificates') {
+    result = await supabaseClient.from('certificates').update({ title, image_url, issued_by }).eq('id', editingId);
+  } else {
+    result = await supabaseClient.from('certificates').insert([{ title, image_url, issued_by }]);
+  }
+
+  if (!result.error) {
+    resetForm('cert');
+    fetchCertificates();
+  }
+});
+
+async function deleteCertificate(id) {
+  if (confirm("Delete this certificate?")) {
+    await supabaseClient.from('certificates').delete().eq('id', id);
+    fetchCertificates();
+  }
+}
+
 
 
 /* --- BLOGS --- */
@@ -364,10 +393,10 @@ function resetForm(prefix) {
   editingTable = null;
   
   // Reset UI labels
-  const titles = { blog: "Write a New Blog", exp: "Add Experience", proj: "Add Project", gallery: "Add Gallery Image" };
-  const btns = { blog: "Publish Blog", exp: "Add Experience", proj: "Add Project", gallery: "Add to Gallery" };
+  const titles = { blog: "Write a New Blog", exp: "Add Experience", proj: "Add Project", gallery: "Add Gallery Image", cert: "Add Certificate" };
+  const btns = { blog: "Publish Blog", exp: "Add Experience", proj: "Add Project", gallery: "Add to Gallery", cert: "Add Certificate" };
   
-  const sectionId = prefix === 'proj' ? 'projects' : (prefix === 'exp' ? 'experience' : prefix);
+  const sectionId = prefix === 'proj' ? 'projects' : (prefix === 'exp' ? 'experience' : (prefix === 'cert' ? 'certificates' : prefix));
   document.querySelector(`#${sectionId} h3`).textContent = titles[prefix];
   document.querySelector(`#${prefix}-form button`).textContent = btns[prefix];
 }

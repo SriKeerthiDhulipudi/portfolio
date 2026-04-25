@@ -103,6 +103,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelectorAll('#gallery .reveal').forEach(el => observer.observe(el));
     } else if (!galleryError) {
       galleryContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No gallery images yet.</div>';
+    // Fetch Certificates
+    const { data: certs, error: certError } = await supabaseClient.from('certificates').select('*').order('created_at', { ascending: false });
+    const certContainer = document.getElementById('certificates-container');
+    if (certs && certs.length > 0) {
+      if (certContainer) {
+        certContainer.innerHTML = '';
+        certs.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'project-card reveal';
+          div.innerHTML = `
+            <img src="${item.image_url}" alt="${item.title}" class="project-img" onerror="this.onerror=null;this.src='';this.classList.add('project-img-placeholder');"/>
+            <div class="project-body">
+              <div class="project-title">${item.title}</div>
+              <p style="color: var(--muted); font-size: 0.85rem;">Issued by ${item.issued_by}</p>
+            </div>
+          `;
+          certContainer.appendChild(div);
+        });
+        document.querySelectorAll('#certificates .reveal').forEach(el => observer.observe(el));
+      }
+    } else if (!certError && certContainer) {
+      certContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No certificates added yet.</div>';
     }
 
   } catch (err) {
