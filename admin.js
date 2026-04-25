@@ -70,7 +70,45 @@ async function fetchData() {
   fetchExperience();
   fetchProjects();
   fetchGallery();
+  fetchMessages();
 }
+
+/* --- MESSAGES --- */
+async function fetchMessages() {
+  const { data, error } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
+  const list = document.getElementById('messages-list');
+  list.innerHTML = '';
+  if (data && data.length > 0) {
+    data.forEach(msg => {
+      const div = document.createElement('div');
+      div.className = 'data-item';
+      div.style.flexDirection = 'column';
+      div.style.alignItems = 'flex-start';
+      div.innerHTML = `
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h4 style="margin: 0;">${msg.name}</h4>
+          <span style="font-size: 0.75rem; color: var(--muted);">${new Date(msg.created_at).toLocaleString()}</span>
+        </div>
+        <p style="color: var(--accent); margin-bottom: 0.5rem;">${msg.email}</p>
+        <p style="color: var(--text); font-style: italic; background: rgba(255,255,255,0.03); padding: 0.8rem; border-radius: 4px; width: 100%; border-left: 3px solid var(--accent);">
+          "${msg.message}"
+        </p>
+        <button class="action-btn delete-btn" style="margin-top: 1rem; align-self: flex-end;" onclick="deleteMessage(${msg.id})">Delete Message</button>
+      `;
+      list.appendChild(div);
+    });
+  } else {
+    list.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">Your inbox is empty.</div>';
+  }
+}
+
+async function deleteMessage(id) {
+  if (confirm("Delete this message?")) {
+    await supabaseClient.from('messages').delete().eq('id', id);
+    fetchMessages();
+  }
+}
+
 
 /* --- BLOGS --- */
 async function fetchBlogs() {
