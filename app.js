@@ -7,25 +7,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // Fetch Blogs
-    const { data: blogs, error: blogsError } = await supabaseClient.from('blogs').select('*').order('created_at', { ascending: false });
     const blogsContainer = document.getElementById('blogs-container');
-    if (blogs && blogs.length > 0) {
-      blogsContainer.innerHTML = ''; // clear loading state
-      blogs.forEach(blog => {
-        const div = document.createElement('div');
-        div.className = 'blog-card reveal';
-        // Open modal or link to blog
-        div.innerHTML = `
-          <div class="blog-title">${blog.title}</div>
-          <div class="blog-summary">${blog.summary}</div>
-          <a href="#" class="blog-link" onclick="openBlogModal('${blog.id}'); return false;">Read More →</a>
-        `;
-        blogsContainer.appendChild(div);
-      });
-    } else if (!blogsError) {
-      blogsContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No blogs available yet.</div>';
-    } else {
-      blogsContainer.innerHTML = `<div style="color: #ef4444; font-size: 0.9rem;">Error loading blogs: Please setup Supabase table.</div>`;
+    if (blogsContainer) {
+      const { data: blogs, error: blogsError } = await supabaseClient.from('blogs').select('*').order('created_at', { ascending: false });
+      if (blogs && blogs.length > 0) {
+        blogsContainer.innerHTML = ''; // clear loading state
+        blogs.forEach(blog => {
+          const div = document.createElement('div');
+          div.className = 'blog-card reveal';
+          // Open modal or link to blog
+          div.innerHTML = `
+            <div class="blog-title">${blog.title}</div>
+            <div class="blog-summary">${blog.summary}</div>
+            <a href="#" class="blog-link" onclick="openBlogModal('${blog.id}'); return false;">Read More →</a>
+          `;
+          blogsContainer.appendChild(div);
+        });
+      } else if (!blogsError) {
+        blogsContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No blogs available yet.</div>';
+      } else {
+        blogsContainer.innerHTML = `<div style="color: #ef4444; font-size: 0.9rem;">Error loading blogs: Please setup Supabase table.</div>`;
+      }
     }
 
     // Fetch Experience
@@ -83,33 +85,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // Fetch Gallery
-    const { data: gallery, error: galleryError } = await supabaseClient.from('gallery').select('*').order('created_at', { ascending: false });
     const galleryContainer = document.getElementById('gallery-container');
-    if (gallery && gallery.length > 0) {
-      galleryContainer.innerHTML = '';
-      gallery.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'project-card reveal';
-        div.innerHTML = `
-          <img src="${item.image_url}" alt="${item.title}" class="project-img" onerror="this.onerror=null;this.src='';this.classList.add('project-img-placeholder');"/>
-          <div class="project-body">
-            <div class="project-title">${item.title}</div>
-            <p style="color: var(--muted); font-size: 0.85rem;">${item.category}</p>
-          </div>
-        `;
-        galleryContainer.appendChild(div);
-      });
-      // Re-run observer for gallery
-      document.querySelectorAll('#gallery .reveal').forEach(el => observer.observe(el));
-    } else if (!galleryError) {
-      galleryContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No gallery images yet.</div>';
+    if (galleryContainer) {
+      const { data: gallery, error: galleryError } = await supabaseClient.from('gallery').select('*').order('created_at', { ascending: false });
+      if (gallery && gallery.length > 0) {
+        galleryContainer.innerHTML = '';
+        gallery.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'project-card reveal';
+          div.innerHTML = `
+            <img src="${item.image_url}" alt="${item.title}" class="project-img" onerror="this.onerror=null;this.src='';this.classList.add('project-img-placeholder');"/>
+            <div class="project-body">
+              <div class="project-title">${item.title}</div>
+              <p style="color: var(--muted); font-size: 0.85rem;">${item.category}</p>
+            </div>
+          `;
+          galleryContainer.appendChild(div);
+        });
+        // Re-run observer for gallery
+        document.querySelectorAll('#gallery .reveal').forEach(el => observer.observe(el));
+      } else if (!galleryError) {
+        galleryContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No gallery images yet.</div>';
+      }
     }
 
     // Fetch Certificates
-    const { data: certs, error: certError } = await supabaseClient.from('certificates').select('*').order('created_at', { ascending: false });
     const certContainer = document.getElementById('certificates-container');
-    if (certs && certs.length > 0) {
-      if (certContainer) {
+    if (certContainer) {
+      const { data: certs, error: certError } = await supabaseClient.from('certificates').select('*').order('created_at', { ascending: false });
+      if (certs && certs.length > 0) {
         certContainer.innerHTML = '';
         certs.forEach(item => {
           const isPdf = item.image_url.toLowerCase().endsWith('.pdf');
@@ -132,9 +136,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           certContainer.appendChild(div);
         });
         document.querySelectorAll('#certificates .reveal').forEach(el => observer.observe(el));
+      } else if (!certError) {
+        certContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No certificates added yet.</div>';
       }
-    } else if (!certError && certContainer) {
-      certContainer.innerHTML = '<div style="color: var(--muted); font-size: 0.9rem;">No certificates added yet.</div>';
     }
 
 
